@@ -10,7 +10,7 @@ async function handleLogin(event) {
 
         const userDetails = { emailId, password };
 
-        await axios.post('http://localhost:3000/user/login', userDetails)
+        await axios.post('http://16.171.174.158:3000/user/login', userDetails)
             .then(response => {
                 console.log('Logged in successfully');
                 document.getElementById('emailId').value = '';

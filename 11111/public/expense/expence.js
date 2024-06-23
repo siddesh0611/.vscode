@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const page = 1;
     const rowsPerPage = localStorage.getItem('rowsPerPage');
     const token = localStorage.getItem('token');
-    const response = await axios.get(`http://localhost:3000/user/expenses?page=${page}&rows=${rowsPerPage}`, {
+    const response = await axios.get(`http://16.171.174.158:3000/user/expenses?page=${page}&rows=${rowsPerPage}`, {
         headers: { "Authorization": token }
     })
     // console.log(response);
@@ -33,7 +33,7 @@ async function setNoOfRows(e) {
 //     try {
 //         console.log("I am here")
 //         const token = localStorage.getItem('token');
-//         const response = await axios.get('http://localhost:3000/user/expenses', {
+//         const response = await axios.get('http://16.171.174.158:3000/user/expenses', {
 //             headers: { "Authorization": token }
 //         });
 
@@ -49,7 +49,7 @@ async function loadExpenses(page, rows) {
     try {
         expenseTableBody.innerHTML = '';
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/user/expenses?page=${page}&rows=${rows}`, {
+        const response = await axios.get(`http://16.171.174.158:3000/user/expenses?page=${page}&rows=${rows}`, {
             headers: { "Authorization": token }
         })
         // console.log(response);
@@ -107,7 +107,7 @@ async function addExpenseToTable(expense) {
 }
 // async function deleteExpense(id) {
 //     try {
-//         await axios.delete(`http://localhost:3000/user/expense/${id}`)
+//         await axios.delete(`http://16.171.174.158:3000/user/expense/${id}`)
 //         loadExpenses();
 
 //     } catch (error) {
@@ -117,10 +117,10 @@ async function addExpenseToTable(expense) {
 async function deleteExpense(id) {
     try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:3000/user/expense/${id}`, {
+        await axios.delete(`http://16.171.174.158:3000/user/expense/${id}`, {
             headers: { "Authorization": token }
         });
-        await axios.post('http://localhost:3000/user/deleteTotalExpense')
+        await axios.post('http://16.171.174.158:3000/user/deleteTotalExpense')
         loadExpenses();
     } catch (error) {
         console.log(error);
@@ -134,7 +134,7 @@ async function deleteExpense(id) {
 //         const expenseName = document.getElementById("expenseName").value;
 //         const expenseAmount = document.getElementById("expenseAmount").value;
 //         const expense = { expenseName, expenseAmount };
-//         const submiting = await axios.post('http://localhost:3000/user/expense', expense);
+//         const submiting = await axios.post('http://16.171.174.158:3000/user/expense', expense);
 //         addExpenseToTable(submiting.data.newExpense);
 //         expenseForm.reset();
 //     } catch (err) {
@@ -148,11 +148,11 @@ async function handleSubmit(event) {
         const expenseAmount = document.getElementById("expenseAmount").value;
         const expense = { expenseName, expenseAmount };
         const token = localStorage.getItem('token');
-        const response = await axios.post('http://localhost:3000/user/expense', expense, {
+        const response = await axios.post('http://16.171.174.158:3000/user/expense', expense, {
             headers: { "Authorization": token }
         });
         if (response) {
-            await axios.post('http://localhost:3000/user/updateTotalExpense', expense, {
+            await axios.post('http://16.171.174.158:3000/user/updateTotalExpense', expense, {
                 headers: { "Authorization": token }
             }).then(() => console.log('updated amount')).catch((err) => console.log(err));
         }
@@ -165,7 +165,7 @@ async function handleSubmit(event) {
 async function checkPremium() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/user/checkPremium', {
+        const response = await axios.get('http://16.171.174.158:3000/user/checkPremium', {
             headers: { "Authorization": token }
         });
         if (response.data.isPremium) {
@@ -195,7 +195,7 @@ async function showPremium() {
 //     inputElement.onclick = async () => {
 //         const token = localStorage.getItem('token')
 //         const page = 1;
-//         const userLeaderBoardArray = await axios.get('http://localhost:3000/premium/showLeaderBoard', { headers: { "Authorization": token } })
+//         const userLeaderBoardArray = await axios.get('http://16.171.174.158:3000/premium/showLeaderBoard', { headers: { "Authorization": token } })
 //         console.log(userLeaderBoardArray)
 
 //         var LeaderboardElem = document.getElementById("leaderboard")
@@ -215,7 +215,7 @@ async function showLeaderbord() {
     inputElement.onclick = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3000/premium/showLeaderBoard', {
+            const response = await axios.get('http://16.171.174.158:3000/premium/showLeaderBoard', {
                 headers: { "Authorization": token }
             });
             // console.log(response);
@@ -250,13 +250,13 @@ document.getElementById('rzp-button1').onclick = async function (e) {
     e.preventDefault();
     try {
         const token = localStorage.getItem('token')
-        const response = await axios.get('http://localhost:3000/purchase/preminummembership', { headers: { "Authorization": token } });
+        const response = await axios.get('http://16.171.174.158:3000/purchase/preminummembership', { headers: { "Authorization": token } });
         // console.log(response);
         var options = {
             "key": response.data.key_id,
             "order_id": response.data.order.id,
             "handler": async function (response) {
-                await axios.post('http://localhost:3000/purchase/updatetransactionstatus', {
+                await axios.post('http://16.171.174.158:3000/purchase/updatetransactionstatus', {
                     order_id: options.order_id,
                     payment_id: response.razorpay_payment_id,
                 }, { headers: { "Authorization": token } });
@@ -275,7 +275,7 @@ document.getElementById('rzp-button1').onclick = async function (e) {
 //     e.preventDefault();
 //     try {
 //         const token = localStorage.getItem('token');
-//         const response = await axios.get('http://localhost:3000/purchase/preminummembership', {
+//         const response = await axios.get('http://16.171.174.158:3000/purchase/preminummembership', {
 //             headers: { "Authorization": token }
 //         });
 
@@ -284,7 +284,7 @@ document.getElementById('rzp-button1').onclick = async function (e) {
 //             "key": response.data.key_id,
 //             "order_id": response.data.order.id, // Access the order ID correctly
 //             "handler": async function (response) {
-//                 await axios.post('http://localhost:3000/purchase/updatetransactionstatus', {
+//                 await axios.post('http://16.171.174.158:3000/purchase/updatetransactionstatus', {
 //                     order_id: options.order_id,
 //                     payment_id: response.razorpay_payment_id,
 //                 }, { headers: { "Authorization": token } });
@@ -304,7 +304,7 @@ document.getElementById('rzp-button1').onclick = async function (e) {
 async function getReport() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/premium/report', {
+        const response = await axios.get('http://16.171.174.158:3000/premium/report', {
             headers: { "Authorization": token }
         });
 
@@ -352,7 +352,7 @@ function displayReport(data) {
 async function downloadExpense() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/user/report', {
+        const response = await axios.get('http://16.171.174.158:3000/user/report', {
             headers: { "Authorization": token }
         });
         if (response) {
