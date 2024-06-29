@@ -7,7 +7,7 @@ async function forgotpassword(e) {
 
         // console.log(userDetails)
 
-        await axios.post('http://51.20.242.169:3000/password/forgotpassword', userDetails).then(response => {
+        await axios.post('http://3.90.200.49:3000/password/forgotpassword', userDetails).then(response => {
             if (response.status === 202) {
                 document.body.innerHTML += '<div style="color:red;">Mail Successfuly sent <div>'
             } else {
