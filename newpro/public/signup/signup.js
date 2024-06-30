@@ -14,7 +14,7 @@ async function handleSignUp(event) {
         };
         console.log(userDetails);
 
-        await axios.post("http://13.60.22.1:4000/user/signup", userDetails)
+        await axios.post("http://54.234.138.208:4000/user/signup", userDetails)
             .then(response => {
                 console.log('User details sent successfully');
                 document.getElementById('userName').value = '';
