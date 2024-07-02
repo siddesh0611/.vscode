@@ -13,6 +13,7 @@ const User = require('./models/user');
 const Expense = require('./models/expense');
 const Order = require('./models/orders');
 const ForgotPassword = require('./models/forgotPassword');
+const FileLink = require('./models/fileLink');
 
 //routes for user
 const userLogin = require('./routes/user');
@@ -28,11 +29,24 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'),
 const app = express();
 
 app.use(cors());
-app.use(helmet());
-app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet());
+app.use(morgan('combined', { stream: accessLogStream }));
+
+
+// app.use('/js', express.static(path.join(__dirname, 'public/js'), {
+//     setHeaders: (res, path, stat) => {
+//         if (path.endsWith('.js')) {
+//             res.set('Content-Type', 'application/javascript');
+//         }
+//     },
+// }));
+// app.use(function (req, res, next) {
+//     res.setHeader('Content-Security-Policy', "script-src 'self' https://cdnjs.cloudflare.com");
+//     next();
+// })
 
 
 app.use('/password', forgotpasswordRoute);
@@ -40,6 +54,11 @@ app.use('/premium', premiunRoute);
 app.use('/purchase', purchaseRoute);
 app.use('/user', userLogin);
 app.use('/user', userExpence);
+
+app.use((req, res) => {
+    console.log('url', req.url);
+    res.sendFile(path.join(__dirname, `public/${req.url}`))
+})
 
 
 
@@ -51,6 +70,9 @@ Order.belongsTo(User);
 
 User.hasMany(ForgotPassword);
 ForgotPassword.belongsTo(User);
+
+User.hasMany(FileLink);
+FileLink.belongsTo(User);
 
 
 

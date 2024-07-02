@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const sequelize = require('../util/database');
+const FileLink = require('../models/fileLink');
 const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 
@@ -89,23 +90,66 @@ exports.checkPremiumStatus = async (req, res) => {
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 require('dotenv').config();
 
+// exports.downloadExpense = async (req, res) => {
+//     if (!req.user.ispremiumuser) {
+//         return res.status(400).json({ message: 'only for premium user' })
+//     }
+//     try {
+//         const userId = req.user.id;
+//         const user = req.user;
+//         const expenses = await user.getExpenses();
+//         console.log(expenses);
+//         const stringifiedExpense = JSON.stringify(expenses);
+
+//         console.log(Object.keys(req.user.__proto__));
+
+//         const filename = `Expense${userId}/${new Date().toISOString()}.txt`;
+//         const fileURL = await uploadTOS3(stringifiedExpense, filename);
+//         const uploadFileUrl = await req.user.createFileLink({ fileURL });
+//         const pastDownloads = await req.user.getFileLink();
+//         res.status(200).json({ fileURL, pastDownloads, success: true });
+
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ fileURL: '', success: false });
+//     }
+// }
+// const FileLink = require('../models/fileLink');
+
+
 exports.downloadExpense = async (req, res) => {
+    if (!req.user.ispremiumuser) {
+        return res.status(400).json({ message: 'Only for premium users' });
+    }
     try {
         const userId = req.user.id;
-        const user = req.user;
+        const user = await req.user.reload(); // Ensure the user instance is fully loaded with associations
         const expenses = await user.getExpenses();
         console.log(expenses);
         const stringifiedExpense = JSON.stringify(expenses);
 
         const filename = `Expense${userId}/${new Date().toISOString()}.txt`;
         const fileURL = await uploadTOS3(stringifiedExpense, filename);
-        res.status(200).json({ fileURL, success: true });
+        // console.log(fileURL);
+
+        // Debugging statement
+        // console.log(Object.keys(req.user.__proto__)); // Check available methods on req.user
+
+        // Ensure req.user.createFilelink is a function
+        if (typeof req.user.createFilelink !== 'function') {
+            throw new Error('createFilelink method is not available on req.user');
+        }
+
+        const uploadFileUrl = await req.user.createFilelink({ fileURL: fileURL });
+        const pastDownloads = await req.user.getFilelinks(); // Ensure this method is available
+        res.status(200).json({ fileURL, pastDownloads, success: true });
 
     } catch (err) {
         console.log(err);
         res.status(500).json({ fileURL: '', success: false });
     }
-}
+};
+
 
 async function uploadTOS3(data, filename) {
     const BUCKET_NAME = process.env.BUCKET_NAME;

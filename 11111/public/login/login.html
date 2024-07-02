@@ -4,14 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Origin-Agent-Cluster" content="?1">
-    <link rel="icon" href="http://13.60.22.1:3000/favicon.ico">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' http://13.60.22.1:3000 data:; script-src 'self' cdn.jsdelivr.net; form-action 'self' http://13.60.22.1:3000;">
-
+        content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
     <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
 </head>
 
 <body>
@@ -35,15 +30,15 @@
     </div>
     <div>
         <label for="signUp">New user:</label>
-        <a href="http://13.60.22.1:3000/signup/signup.html" name="signUp">signup</a>
+        <a href="http://16.171.28.233:3000/signup/signup.html" name="signUp">signup</a>
     </div>
     <div>
-        <a href="http://13.60.22.1:3000/forgotPassword/forgotPassword.html">forgot Password</a>
+        <a href="http://16.171.28.233:3000/forgotPassword/forgotPassword.html">forgot Password</a>
     </div>
 
-
-
+    <link rel="stylesheet" href="../css/login.css">
     <script src="./login.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 
 </html>

@@ -12,6 +12,10 @@ const Expense = sequelize.define('expense', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    discription: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     expenseAmount: {
         type: DataTypes.FLOAT,
         allowNull: false

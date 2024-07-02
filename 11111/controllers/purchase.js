@@ -5,8 +5,8 @@ require('dotenv').config();
 
 // function generateAccessToken(id, name, ispremiumuser) {
 //     return jwt.sign({ userId: id, name: name, ispremiumuser: ispremiumuser }, process.env.TOKEN)
-
 // }
+
 
 exports.purchasePremium = async (req, res) => {
     try {

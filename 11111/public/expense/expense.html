@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Origin-Agent-Cluster" content="?1">
-    <link rel="icon" href="http://13.60.22.1:3000/favicon.ico">
+    <!-- <meta http-equiv="Origin-Agent-Cluster" content="?1">
+    <link rel="icon" href="http://16.171.28.233:3000/favicon.ico">
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' http://13.60.22.1:3000 data:; script-src 'self' cdn.jsdelivr.net; form-action 'self' http://13.60.22.1:3000;">
+        content="default-src 'self'; img-src 'self' http://16.171.28.233:3000 data:; script-src 'self' cdn.jsdelivr.net; form-action 'self' http://16.171.28.233:3000;"> -->
 
     <title>Expense Tracker</title>
     <link rel="stylesheet" href="../css/expence.css">
@@ -38,14 +38,17 @@
             </select>
         </div>
 
+        <label for="discription">Discription</label>
+        <input type="text" id="discription" required>
+
         <label for="expenseAmount">Amount:</label>
         <input type="number" id="expenseAmount" required>
         <button type="submit">Add Expense</button>
     </form>
 
-    <div>
-        <label for="rowsPerPage">Rows per page</label>
-        <select id="rowsPerPage">
+    <div class="table">
+        <label id="rowsPerPage" for="rowsPerPage">Rows per page</label>
+        <select id="rowsPerPage" class="rowsPerPage">
             <option value="" disabled selected>0</option>
             <option value="5">5</option>
             <option value="10">10</option>
@@ -53,20 +56,23 @@
             <option value="20">20</option>
             <option value="30">30</option>
         </select>
-        <button onclick="setNoOfRows(event)">filter</button>
+        <button id="rowsPerPage" onclick="setNoOfRows(event)">filter</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Expense Name</th>
+                    <th>Amount</th>
+                    <th>Discription</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+            </tbody>
+        </table>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Expense Name</th>
-                <th>Amount</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="expenseTableBody">
-        </tbody>
-    </table>
+
     <div>
         <button onclick="downloadExpense()">Download Expense</button>
     </div>
@@ -85,6 +91,7 @@
 
     <div id="pagination"></div>
     <div id="leaderboard"></div>
+    <div id="fileUrl"></div>
     <script src="expence.js"></script>
 </body>
 

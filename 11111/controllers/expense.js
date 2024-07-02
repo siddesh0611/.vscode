@@ -8,11 +8,11 @@ const sequelize = require('../util/database');
 exports.postExpense = async (req, res) => {
     const t = await sequelize.transaction();
     try {
-        const { expenseName, expenseAmount } = req.body;
+        const { expenseName, expenseAmount, discription } = req.body;
         const userId = req.user.id;
         const totalExpense = Number(expenseAmount) + Number(req.user.totalExpense)
 
-        const newExpense = await req.user.createExpense({ expenseName, expenseAmount }, { transaction: t });
+        const newExpense = await req.user.createExpense({ expenseName, discription, expenseAmount, }, { transaction: t });
         await User.update({ totalExpense: totalExpense }, { where: { id: userId }, transaction: t });
 
         await t.commit();
