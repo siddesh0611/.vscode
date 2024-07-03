@@ -1,4 +1,4 @@
-//imp requires
+//importing requires
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -27,7 +27,6 @@ const forgotpasswordRoute = require('./routes/forgotPassword');
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 
 const app = express();
-
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -35,33 +34,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 app.use(morgan('combined', { stream: accessLogStream }));
 
-
-// app.use('/js', express.static(path.join(__dirname, 'public/js'), {
-//     setHeaders: (res, path, stat) => {
-//         if (path.endsWith('.js')) {
-//             res.set('Content-Type', 'application/javascript');
-//         }
-//     },
-// }));
-// app.use(function (req, res, next) {
-//     res.setHeader('Content-Security-Policy', "script-src 'self' https://cdnjs.cloudflare.com");
-//     next();
-// })
-
-
+//connecting routes
 app.use('/password', forgotpasswordRoute);
 app.use('/premium', premiunRoute);
 app.use('/purchase', purchaseRoute);
-app.use('/user', userLogin);
 app.use('/user', userExpence);
+app.use('/user', userLogin);
 
+//for frontned deplayment
 app.use((req, res) => {
     console.log('url', req.url);
     res.sendFile(path.join(__dirname, `public/${req.url}`))
 })
 
-
-
+//database relations
 User.hasMany(Expense);
 Expense.belongsTo(User);
 

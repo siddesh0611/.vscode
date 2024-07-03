@@ -7,7 +7,6 @@ require('dotenv').config();
 //     return jwt.sign({ userId: id, name: name, ispremiumuser: ispremiumuser }, process.env.TOKEN)
 // }
 
-
 exports.purchasePremium = async (req, res) => {
     try {
         var rzp = new Razorpay({
@@ -33,37 +32,7 @@ exports.purchasePremium = async (req, res) => {
         res.status(403).json({ message: 'Something went wrong', error: err.message });
     }
 };
-// exports.updatePremium = async (req, res) => {
-//     try {
-//         const userId = req.user.id;
-//         const { payment_id, order_id } = req.body;
 
-//         if (!payment_id || !order_id) {
-//             throw new Error("Payment ID or Order ID not provided in the request body.");
-//         }
-
-//         const order = await Order.findOne({ where: { orderid: order_id } });
-
-//         if (!order) {
-//             throw new Error("Order not found.");
-//         }
-
-//         await order.update({ payment_id: payment_id, status: 'SUCCESSFUL' });
-
-//         await req.user.update({ ispremiumuser: true }).then(() => {
-//             return res.status(202).json({
-//                 success: true, message: "Transaction Successful"
-//             })
-//         }).catch((err) => {
-//             throw new Error(err);
-//         })
-
-//         return res.status(202).json({ success: true, message: "Transaction Successful" });
-//     } catch (err) {
-//         console.error('Error in updatePremium:', err);
-//         res.status(400).json({ success: false, message: "Error processing request", error: err.message });
-//     }
-// };
 exports.updatePremium = async (req, res) => {
     try {
         const userId = req.user.id;

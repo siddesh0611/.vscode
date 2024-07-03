@@ -3,8 +3,7 @@ const Expense = require('../models/expense');
 const User = require('../models/user');
 const sequelize = require('../util/database');
 
-
-
+//POST ==> expense
 exports.postExpense = async (req, res) => {
     const t = await sequelize.transaction();
     try {
@@ -24,6 +23,8 @@ exports.postExpense = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+//GET ==> expense
 exports.getExpense = async (req, res) => {
     try {
         const page = +req.query.page || 1;
@@ -54,16 +55,7 @@ exports.getExpense = async (req, res) => {
     }
 };
 
-// exports.getExpense = async (req, res) => {
-//     try {
-//         const userId = req.user.id;
-//         const expenses = await Expense.findAll({ where: { userId } });
-//         res.status(200).json({ expenses });
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// };
-
+//DELETE ==> expense
 exports.deleteExpense = async (req, res) => {
     const t = await sequelize.transaction();
     try {
