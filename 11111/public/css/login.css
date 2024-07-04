@@ -23,7 +23,6 @@ body {
 form {
     display: flex;
     flex-direction: column;
-    /* Stacks form inputs vertically */
 }
 
 label {
@@ -62,14 +61,10 @@ button[type="submit"]:hover {
 
 a {
     color: #1e90ff;
-    /* Link color */
     text-decoration: none;
-    /* Remove underline */
     margin-bottom: 10px;
-    /* Adds spacing between links */
 }
 
 a:hover {
     text-decoration: underline;
-    /* Underline on hover */
 }

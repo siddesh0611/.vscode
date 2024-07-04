@@ -12,8 +12,8 @@ exports.getPremium = async (req, res, next) => {
 
         res.status(200).json(leaderboardofusers);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'An error occurred while fetching premium users' });
+        console.log(err);
+        res.status(500).json({ error: 'Error occurred in getting premium users' });
     }
 };
 
@@ -34,7 +34,7 @@ exports.report = async (req, res) => {
         res.status(200).json({ weekly, monthly, yearly });
 
     } catch (err) {
-        console.error('inside report', err);
+        console.log('inside report', err);
         res.status(500).json({ error: err.message });
     }
 };

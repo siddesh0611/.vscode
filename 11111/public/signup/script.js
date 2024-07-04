@@ -12,9 +12,9 @@ async function handleSignUp(event) {
             emailId: emailId,
             password: password
         };
-        console.log(userDetails);
+        // console.log(userDetails);
 
-        await axios.post('http://13.60.36.173:3000/user/signup', userDetails)
+        await axios.post('http://13.60.31.66:3000/user/signup', userDetails)
             .then(response => {
                 console.log('User details sent successfully');
                 document.getElementById('userName').value = '';
@@ -23,11 +23,11 @@ async function handleSignUp(event) {
             })
             .catch(err => {
                 if (err.response && err.response.data && err.response.data.message) {
-                    console.error(err.response.data.message);
+                    console.log(err.response.data.message);
                     messageDiv.textContent = err.response.data.message;
 
                 } else {
-                    console.error(err);
+                    console.log(err);
                 }
             });
     } catch (err) {

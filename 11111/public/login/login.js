@@ -11,7 +11,7 @@ async function handleLogin(event) {
         const userDetails = { emailId, password };
 
 
-        await axios.post('http://13.60.36.173:3000/user/login', userDetails)
+        await axios.post('http://13.60.31.66:3000/user/login', userDetails)
             .then(response => {
                 console.log('Logged in successfully');
                 document.getElementById('emailId').value = '';
@@ -21,10 +21,10 @@ async function handleLogin(event) {
             })
             .catch(err => {
                 if (err.response && err.response.data && err.response.data.message) {
-                    console.error(err.response.data.message);
+                    console.log(err.response.data.message);
                     messageDiv.textContent = err.response.data.message;
                 } else {
-                    console.error(err);
+                    console.log(err);
                 }
             });
     } catch (err) {

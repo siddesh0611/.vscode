@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const page = 1;
     const rowsPerPage = localStorage.getItem('rowsPerPage');
     const token = localStorage.getItem('token');
-    const response = await axios.get(`http://13.60.36.173:3000/user/expenses?page=${page}&rows=${rowsPerPage}`, {
+    const response = await axios.get(`http://13.60.31.66:3000/user/expenses?page=${page}&rows=${rowsPerPage}`, {
         headers: { "Authorization": token }
     })
     // console.log(response);
@@ -33,7 +33,7 @@ async function loadExpenses(page, rows) {
     try {
         expenseTableBody.innerHTML = '';
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://13.60.36.173:3000/user/expenses?page=${page}&rows=${rows}`, {
+        const response = await axios.get(`http://13.60.31.66:3000/user/expenses?page=${page}&rows=${rows}`, {
             headers: { "Authorization": token }
         })
         // console.log(response);
@@ -95,7 +95,7 @@ async function addExpenseToTable(expense) {
 async function deleteExpense(id) {
     try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://13.60.36.173:3000/user/expense/${id}`, {
+        await axios.delete(`http://13.60.31.66:3000/user/expense/${id}`, {
             headers: { "Authorization": token }
         });
 
@@ -113,7 +113,7 @@ async function handleSubmit(event) {
         const discription = document.getElementById("discription").value;
         const expense = { expenseName, expenseAmount, discription };
         const token = localStorage.getItem('token');
-        const response = await axios.post('http://13.60.36.173:3000/user/expense', expense, {
+        const response = await axios.post('http://13.60.31.66:3000/user/expense', expense, {
             headers: { "Authorization": token }
         });
         addExpenseToTable(response.data.newExpense);
@@ -126,7 +126,7 @@ async function handleSubmit(event) {
 async function checkPremium() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://13.60.36.173:3000/user/checkPremium', {
+        const response = await axios.get('http://13.60.31.66:3000/user/checkPremium', {
             headers: { "Authorization": token }
         });
         if (response.data.isPremium) {
@@ -151,14 +151,14 @@ async function showLeaderbord() {
     inputElement.onclick = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://13.60.36.173:3000/premium/showLeaderBoard', {
+            const response = await axios.get('http://13.60.31.66:3000/premium/showLeaderBoard', {
                 headers: { "Authorization": token }
             });
             // console.log(response);
 
             var leaderboardElem = document.getElementById("leaderboard");
             if (!leaderboardElem) {
-                console.error('Element with ID "leaderboard" not found');
+                console.log('Element with ID "leaderboard" not found');
                 return;
             }
 
@@ -167,14 +167,14 @@ async function showLeaderbord() {
                 leaderboardElem.innerHTML += `<li>Name-${userDetails.userName} Total Expense-${userDetails.totalExpense || 0}</li>`;
             });
         } catch (error) {
-            console.error('Error fetching leaderboard:', error);
+            console.log('Error fetching leaderboard:', error);
             alert('Failed to load leaderboard');
         }
     };
 
     const messageElem = document.getElementById("message");
     if (!messageElem) {
-        console.error('Element with ID "message" not found');
+        console.log('Element with ID "message" not found');
         return;
     }
 
@@ -186,13 +186,13 @@ document.getElementById('rzp-button1').onclick = async function (e) {
     e.preventDefault();
     try {
         const token = localStorage.getItem('token')
-        const response = await axios.get('http://13.60.36.173:3000/purchase/preminummembership', { headers: { "Authorization": token } });
+        const response = await axios.get('http://13.60.31.66:3000/purchase/preminummembership', { headers: { "Authorization": token } });
         // console.log(response);
         var options = {
             "key": response.data.key_id,
             "order_id": response.data.order.id,
             "handler": async function (response) {
-                await axios.post('http://13.60.36.173:3000/purchase/updatetransactionstatus', {
+                await axios.post('http://13.60.31.66:3000/purchase/updatetransactionstatus', {
                     order_id: options.order_id,
                     payment_id: response.razorpay_payment_id,
                 }, { headers: { "Authorization": token } });
@@ -212,13 +212,13 @@ document.getElementById('rzp-button1').onclick = async function (e) {
 async function getReport() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://13.60.36.173:3000/premium/report', {
+        const response = await axios.get('http://13.60.31.66:3000/premium/report', {
             headers: { "Authorization": token }
         });
 
         displayReport(response.data);
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
 }
 
@@ -253,7 +253,7 @@ function displayReport(data) {
 async function downloadExpense() {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://13.60.36.173:3000/user/report', {
+        const response = await axios.get('http://13.60.31.66:3000/user/report', {
             headers: { "Authorization": token }
         });
         console.log(response.data.pastDownloads);
@@ -265,6 +265,9 @@ async function downloadExpense() {
             showFileUrls(response.data.pastDownloads)
         }
     } catch (err) {
+        const messageElem = document.getElementById('message');
+        messageElem.innerHTML = '';
+        messageElem.innerHTML = `<p>${err.response.data.message}</p>`
         console.log(err);
     }
 

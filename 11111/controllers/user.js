@@ -53,8 +53,8 @@ exports.login = async (req, res, next) => {
 
         bcrypt.compare(password, userLogin.password, (err, isMatch) => {
             if (err) {
-                console.error(err);
-                return res.status(500).json({ message: 'Internal Server Error' });
+                console.log(err);
+                return res.status(500).json({ message: 'Server Error' });
             }
 
             if (!isMatch) {
@@ -66,8 +66,8 @@ exports.login = async (req, res, next) => {
         });
 
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Internal Server Error' });
+        console.log(err);
+        res.status(500).json({ message: 'Server Error' });
     }
 };
 
@@ -82,7 +82,7 @@ exports.checkPremiumStatus = async (req, res) => {
         }
         res.status(200).json({ isPremium: user.ispremiumuser });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -151,38 +151,7 @@ async function uploadTOS3(data, filename) {
         const fileURL = `https://${BUCKET_NAME}.s3.amazonaws.com/${filename}`;
         return fileURL;
     } catch (err) {
-        console.error('Error uploading to S3:', err);
+        console.log('Error uploading to S3:', err);
         throw err;
     }
 }
-
-exports.updateTotalExpense = async (req, res) => {
-    const userId = req.user.id;
-    const expenseAmount = parseFloat(req.body.expenseAmount);
-
-
-    if (isNaN(expenseAmount)) {
-        return res.status(400).json({ error: 'Invalid expense amount' });
-    }
-
-    try {
-
-        const user = await User.findOne({ where: { id: userId } });
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        const newTotalExpense = Number(req.user.totaleExpense) + Number(expenseAmount);
-
-        await User.update(
-            { totaleExpense: newTotalExpense },
-            { where: { id: userId } }
-        );
-
-        res.status(200).json({ message: 'Total expense updated successfully' });
-    } catch (error) {
-        console.error('Error updating total expense:', error);
-        res.status(500).json({ error: 'An error occurred while updating the total expense' });
-    }
-};

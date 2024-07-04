@@ -35,14 +35,11 @@ input[type="text"],
 input[type="number"],
 select {
     width: 100%;
-    /* Adjusted width for shorter input elements */
     padding: 8px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    /* float: right; */
-    /* Align input elements to the right */
 }
 
 
@@ -52,12 +49,10 @@ button[type="submit"] {
     color: white;
     padding: 10px 15px;
     border: none;
-    /* Changed to none to remove the border */
     border-radius: 4px;
     cursor: pointer;
     display: block;
     margin: 0 auto;
-    /* Center the button */
 }
 
 button[type="submit"]:hover {

@@ -3,10 +3,6 @@ const Order = require('../models/orders');
 const User = require('../models/user');
 require('dotenv').config();
 
-// function generateAccessToken(id, name, ispremiumuser) {
-//     return jwt.sign({ userId: id, name: name, ispremiumuser: ispremiumuser }, process.env.TOKEN)
-// }
-
 exports.purchasePremium = async (req, res) => {
     try {
         var rzp = new Razorpay({
@@ -28,7 +24,7 @@ exports.purchasePremium = async (req, res) => {
 
 
     } catch (err) {
-        console.error('Error in purchasePremium:', err);
+        console.log('Error in purchasePremium:', err);
         res.status(403).json({ message: 'Something went wrong', error: err.message });
     }
 };
@@ -54,11 +50,11 @@ exports.updatePremium = async (req, res) => {
             await req.user.update({ ispremiumuser: true });
             return res.status(202).json({ success: true, message: "Transaction Successful" });
         } catch (updateError) {
-            console.error('Error updating user:', updateError);
+            console.log('Error updating user:', updateError);
             return res.status(500).json({ success: false, message: "Error updating user information.", error: updateError.message });
         }
     } catch (err) {
-        console.error('Error in updatePremium:', err);
+        console.log('Error in updatePremium:', err);
         return res.status(400).json({ success: false, message: "Error processing request", error: err.message });
     }
 };

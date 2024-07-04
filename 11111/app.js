@@ -22,7 +22,6 @@ const purchaseRoute = require('./routes/purchase');
 const premiunRoute = require('./routes/premium');
 const forgotpasswordRoute = require('./routes/forgotPassword');
 
-// const { default: orders } = require('razorpay/dist/types/orders');
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 
