@@ -20,7 +20,10 @@ const userRoutes = require('./routes/signup');
 // const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -28,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(morgan('combined', { stream: accessLogStream }));
 
 //connecting routes
+app.use('/user', userRoutes);
 
 
 //for frontned deplayment
