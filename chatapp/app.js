@@ -11,6 +11,7 @@ const fs = require('fs');
 //importing database
 const sequelize = require('./util/database');
 const User = require('./models/user');
+const UserChat = require('./models/userChat');
 
 //routes for user
 const userRoutes = require('./routes/signup');
@@ -41,6 +42,8 @@ app.use('/user', userRoutes);
 // })
 
 //database relations
+User.hasMany(UserChat);
+UserChat.belongsTo(User);
 
 
 sequelize.sync()

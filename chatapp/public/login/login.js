@@ -17,7 +17,7 @@ async function handleLogin(event) {
                 document.getElementById('emailId').value = '';
                 document.getElementById('password').value = '';
                 localStorage.setItem('token', response.data.token);
-                window.location.href = '../expense/expense.html';
+                window.location.href = '../chat/chat.html';
             })
             .catch(err => {
                 if (err.response && err.response.data && err.response.data.message) {
