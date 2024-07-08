@@ -36,3 +36,41 @@ exports.signup = async (req, res, next) => {
         console.log(err);
     }
 };
+
+
+function generateToken(id) {
+    return jwt.sign({ userId: id }, 'secretKey');
+}
+
+exports.login = async (req, res, next) => {
+    try {
+        const { emailId, password } = req.body;
+
+        if (!emailId || !password) {
+            return res.status(400).json({ message: 'Email ID and password must not be empty' });
+        }
+
+        const userLogin = await User.findOne({ where: { emailId: emailId } });
+        if (!userLogin) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        bcrypt.compare(password, userLogin.password, (err, isMatch) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).json({ message: 'Server Error' });
+            }
+
+            if (!isMatch) {
+                return res.status(401).json({ message: 'Email ID and password do not match' });
+            }
+
+            const token = generateToken(userLogin.id);
+            return res.status(200).json({ message: 'Login successful', token });
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
