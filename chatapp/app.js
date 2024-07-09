@@ -15,6 +15,7 @@ const UserChat = require('./models/userChat');
 
 //routes for user
 const userRoutes = require('./routes/signup');
+const chatRoutes = require('./routes/chat');
 
 
 
@@ -22,7 +23,7 @@ const userRoutes = require('./routes/signup');
 
 const app = express();
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true
 }));
 
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //connecting routes
 app.use('/user', userRoutes);
+app.use('/chat', chatRoutes);
 
 
 //for frontned deplayment
@@ -42,7 +44,8 @@ app.use('/user', userRoutes);
 // })
 
 //database relations
-User.hasMany(UserChat);
+// User.hasMany(UserChat, { as: 'userchats' });
+User.hasMany(UserChat, { as: 'userchats' });
 UserChat.belongsTo(User);
 
 

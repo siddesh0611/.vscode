@@ -2,13 +2,14 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const sequelize = require('../util/database');
 // const FileLink = require('../models/fileLink');
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 // const AWS = require('aws-sdk');
 
 exports.signup = async (req, res, next) => {
     const t = await sequelize.transaction();
     try {
         const { userName, emailId, phoneNo, password } = req.body;
+        console.log(userName, emailId, phoneNo, password);
 
         if (!userName || !emailId || !phoneNo || !password) {
             return res.status(400).json({ message: 'emailId, phoneNo and password must not be empty' });
@@ -25,7 +26,7 @@ exports.signup = async (req, res, next) => {
             if (err) {
                 thrownew.error('error in dcrypt');
             }
-            await User.create({ userName, emailId, password: hash }, { transaction: t });
+            await User.create({ userName, emailId, phoneNo, password: hash }, { transaction: t });
             await t.commit();
             res.status(200).json({ message: 'User signed up successfully' });
 
@@ -44,6 +45,7 @@ function generateToken(id) {
 
 exports.login = async (req, res, next) => {
     try {
+        console.log('i am here');
         const { emailId, password } = req.body;
 
         if (!emailId || !password) {
