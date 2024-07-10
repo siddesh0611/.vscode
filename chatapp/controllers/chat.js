@@ -42,15 +42,15 @@ exports.getChats = async (req, res) => {
 
 exports.getNewChats = async (req, res) => {
     try {
-        const lastGet = new Date(req.query.lastGet);
+        const lastChatId = new Date(req.query.lastChatId);
         const newChats = await UserChat.findAll({
             where: {
                 createdAt: {
-                    [Sequelize.Op.gt]: lastGet
+                    [Sequelize.Op.gt]: lastChatId
                 }
             }
         })
-        console.log(newChats);
+        // console.log(newChats);
         res.status(201).json({ newChats })
     } catch (err) {
         console.log(err);

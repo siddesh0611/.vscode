@@ -1,51 +1,44 @@
 const token = localStorage.getItem('token');
-document.addEventListener("DOMContentLoaded", async () => {
+let latestChatId = localStorage.getItem('latestChatId') || 0;
 
-    const response = await axios.get('http://localhost:3000/chat/chatlogs', {
-        headers: { "Authorization": token }
-    })
-    // console.log(response);
-    if (response) {
-        response.data.allChats.forEach(chat => {
-            addChatToTheTable(chat);
-        })
-    }
-    setInterval(async () => {
-        const lastGet = new Date().toISOString();
-        console.log(lastGet);
-        const checkNewChat = await axios.get(`http://localhost:3000/chat/checknewchat?lastGet=${lastGet}`, {
-            headers: { "Authorization": token }
-        });
-        console.log(checkNewChat.data);
-        if (checkNewChat) {
-            checkNewChat.data.newChats.forEach(chat => {
-                console.log('I am inside');
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        let storedChats = localStorage.getItem('chats');
+        if (storedChats) {
+            storedChats = JSON.parse(storedChats);
+            storedChats.forEach(chat => {
                 addChatToTheTable(chat);
             });
         }
-    }, 1000)
 
+        const getNewChats = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/chat/checknewchat?lastChatId=${latestChatId}`, {
+                    headers: { "Authorization": token }
+                })
+
+                if (response && response.data && response.data.newChats) {
+                    const newChats = response.data.newChats;
+                    if (newChats.length > 0) {
+                        newChats.forEach(chat => {
+                            addChatToTheTable(chat);
+                        })
+                        let updatedChats = storedChats ? [...storedChats, ...newChats] : newChats;
+                        localStorage.setItem('chats', JSON.stringify(updatedChats));
+                        latestChatId = newChats[newChats.length - 1].id;
+                        localStorage.setItem('latestChatId', latestChatId);
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        setInterval(getNewChats, 5000);
+        await getNewChats();
+    } catch (err) {
+        console.log(err);
+    }
 });
-
-// setInterval(async () => {
-//     try {
-//         const lastGet = new Date().toISOString();
-//         console.log(lastGet);
-//         const checkNewChat = await axios.get(`http://localhost:3000/chat/checknewchat?lastGet=${lastGet}`, {
-//             headers: { "Authorization": token }
-//         });
-//         console.log(checkNewChat.data);
-//         if (checkNewChat) {
-//             checkNewChat.data.newChats.forEach(chat => {
-//                 console.log('I am inside');
-//                 addChatToTheTable(chat);
-//             });
-//         }
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }, 1000);
-
 
 
 async function sendMessage(event) {
@@ -77,3 +70,51 @@ async function addChatToTheTable(data) {
         console.log(err);
     }
 }
+
+// document.addEventListener("DOMContentLoaded", async () => {
+
+//     const response = await axios.get('http://localhost:3000/chat/chatlogs', {
+//         headers: { "Authorization": token }
+//     })
+//     // console.log(response);
+//     if (response) {
+//         response.data.allChats.forEach(chat => {
+//             addChatToTheTable(chat);
+//         })
+//     }
+//     setInterval(async () => {
+//         const lastGet = new Date().toISOString();
+//         console.log(lastGet);
+//         const checkNewChat = await axios.get(`http://localhost:3000/chat/checknewchat?lastGet=${lastGet}`, {
+//             headers: { "Authorization": token }
+//         });
+//         console.log(checkNewChat.data);
+//         if (checkNewChat) {
+//             checkNewChat.data.newChats.forEach(chat => {
+//                 console.log('I am inside');
+//                 addChatToTheTable(chat);
+//             });
+//         }
+//     }, 1000)
+
+// });
+
+// setInterval(async () => {
+//     try {
+//         const lastGet = new Date().toISOString();
+//         console.log(lastGet);
+//         const checkNewChat = await axios.get(`http://localhost:3000/chat/checknewchat?lastGet=${lastGet}`, {
+//             headers: { "Authorization": token }
+//         });
+//         console.log(checkNewChat.data);
+//         if (checkNewChat) {
+//             checkNewChat.data.newChats.forEach(chat => {
+//                 console.log('I am inside');
+//                 addChatToTheTable(chat);
+//             });
+//         }
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }, 1000);
+
