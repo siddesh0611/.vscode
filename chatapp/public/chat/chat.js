@@ -1,5 +1,5 @@
 const token = localStorage.getItem('token');
-let latestChatId = localStorage.getItem('latestChatId') || 0;
+
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
@@ -13,12 +13,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const getNewChats = async () => {
             try {
+                let latestChatId = localStorage.getItem('latestChatId') || 0;
                 const response = await axios.get(`http://localhost:3000/chat/checknewchat?lastChatId=${latestChatId}`, {
                     headers: { "Authorization": token }
                 })
 
                 if (response && response.data && response.data.newChats) {
                     const newChats = response.data.newChats;
+                    // console.log(newChats);
                     if (newChats.length > 0) {
                         newChats.forEach(chat => {
                             addChatToTheTable(chat);
@@ -40,6 +42,72 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
+document.getElementById('createGroupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const groupName = document.getElementById('groupName').value;
+
+    const response = await axios.post('http://localhost:3000/group/create', { name: groupName }, {
+        headers: { "Authorization": token }
+    });
+
+    if (response.data.newGroup) {
+        // Update UI with the new group
+        const groupItem = document.createElement('li');
+        groupItem.textContent = response.data.newGroup.name;
+        groupItem.dataset.groupId = response.data.newGroup.id;
+        document.getElementById('groupsList').appendChild(groupItem);
+    }
+});
+
+document.getElementById('inviteUserForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const userEmail = document.getElementById('userEmail').value;
+    const groupId = document.getElementById('groupId').value;
+
+    const response = await axios.post('http://localhost:3000/group/invite', { groupId, userEmail }, {
+        headers: { "Authorization": token }
+    });
+
+    if (response.data.userGroup) {
+        // Notify the user that the invitation was successful
+        alert('User invited successfully');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Fetch and display groups
+    const groupsResponse = await axios.get('http://localhost:3000/groups', {
+        headers: { "Authorization": token }
+    });
+
+    if (groupsResponse.data.groups) {
+        groupsResponse.data.groups.forEach(group => {
+            const groupItem = document.createElement('li');
+            groupItem.textContent = group.name;
+            groupItem.dataset.groupId = group.id;
+            document.getElementById('groupsList').appendChild(groupItem);
+        });
+    }
+
+    // Fetch and display chats for the selected group
+    document.getElementById('groupsList').addEventListener('click', async (e) => {
+        const groupId = e.target.dataset.groupId;
+        const chatsResponse = await axios.get(`http://localhost:3000/group/chats?groupId=${groupId}`, {
+            headers: { "Authorization": token }
+        });
+
+        if (chatsResponse.data.groupChats) {
+            const chatsContainer = document.getElementById('chatsContainer');
+            chatsContainer.innerHTML = ''; // Clear previous chats
+            chatsResponse.data.groupChats.forEach(chat => {
+                const chatItem = document.createElement('li');
+                chatItem.textContent = chat.message;
+                chatsContainer.appendChild(chatItem);
+            });
+        }
+    });
+});
+
 
 async function sendMessage(event) {
     event.preventDefault();
@@ -50,7 +118,10 @@ async function sendMessage(event) {
             headers: { "Authorization": token }
         });
 
+        localStorage.setItem('latestChatId', response.data.newChat.id);
         addChatToTheTable(response.data.newChat);
+
+
         // chat = '';
 
     } catch (err) {

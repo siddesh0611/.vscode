@@ -14,6 +14,18 @@
 
 <body>
     <a href="../login/login.html">login</a>
+    <form id="createGroupForm">
+        <input type="text" id="groupName" placeholder="Group Name" required />
+        <button type="submit">Create Group</button>
+    </form>
+
+    <ul id="groupsList"></ul>
+    <form id="inviteUserForm">
+        <input type="email" id="userEmail" placeholder="User Email" required />
+        <input type="hidden" id="groupId" />
+        <button type="submit">Invite</button>
+    </form>
+
     <div id="displayMessage"></div>
     <h1>Chat APP</h1>
 
