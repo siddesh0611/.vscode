@@ -1,4 +1,4 @@
-const { where } = require('sequelize');
+const { where, DatabaseError, DATE, Sequelize } = require('sequelize');
 const UserChat = require('../models/userChat');
 const User = require('../models/user');
 const sequelize = require('../util/database');
@@ -8,8 +8,8 @@ exports.postChat = async (req, res, next) => {
     try {
         const { chat } = req.body;
         const userId = req.user.id;
-        console.log(chat);
-        console.log(Object.getOwnPropertyNames(req.user.__proto__));
+        // console.log(chat);
+        // console.log(Object.getOwnPropertyNames(req.user.__proto__));
         // console.log(userId);
 
         const newChat = await req.user.createUserchat({ chatLogs: chat }, { transaction: t })
@@ -28,7 +28,7 @@ exports.getChats = async (req, res) => {
     try {
         const userId = req.user.id;
 
-        const allChats = await req.user.getUserchats();
+        const allChats = await UserChat.findAll();
         await t.commit();
 
         res.status(201).json({ allChats });
@@ -37,5 +37,23 @@ exports.getChats = async (req, res) => {
         console.log(err);
         await t.rollback();
         res.status(500).json({ err, message: 'error in getChats' });
+    }
+}
+
+exports.getNewChats = async (req, res) => {
+    try {
+        const lastGet = new Date(req.query.lastGet);
+        const newChats = await UserChat.findAll({
+            where: {
+                createdAt: {
+                    [Sequelize.Op.gt]: lastGet
+                }
+            }
+        })
+        console.log(newChats);
+        res.status(201).json({ newChats })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ err, message: 'error in getNewChats' })
     }
 }
