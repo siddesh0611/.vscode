@@ -144,20 +144,20 @@ exports.promoteUsersToAdmin = async (req, res) => {
 };
 
 exports.removeUserFromGroup = async (req, res) => {
-    const { groupId } = req.params;
-    const { userId } = req.body;
+    const groupId = req.params;
+    const userId = req.body;
     console.log('------------------');
-    console.log(groupId, userId);
+    console.log(groupId, userId, req.user.id);
     try {
         // Check if the requesting user is an admin of the group
         const userGroup = await UserGroup.findOne({
             where: {
-                GroupId: groupId,
+                GroupId: groupId.groupid,
                 UserId: req.user.id, // Assuming you have authentication middleware setting req.user
                 isAdmin: true
             }
         });
-
+        console.log(userGroup);
         if (!userGroup) {
             return res.status(403).json({ error: 'Unauthorized' });
         }
@@ -165,8 +165,8 @@ exports.removeUserFromGroup = async (req, res) => {
         // Remove user from the group
         await UserGroup.destroy({
             where: {
-                GroupId: groupId,
-                UserId: userId
+                GroupId: groupId.groupid,
+                UserId: userId.userIds
             }
         });
 

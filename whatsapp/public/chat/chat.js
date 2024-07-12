@@ -22,7 +22,7 @@ function createGroup(event) {
     const memberSelect = document.getElementById('group-members');
     // const userIds = Array.from(memberSelect.selectedOptions).map(option => option.value);
 
-    axios.post('http://localhost:3000/group/creategroup', { groupName }, {
+    axios.post('http://13.60.31.66:3000/group/creategroup', { groupName }, {
         headers: { "Authorization": token }
     })
         .then(response => {
@@ -37,7 +37,7 @@ function createGroup(event) {
         });
 }
 function loadGroupChats(groupId) {
-    axios.get(`http://localhost:3000/group/${groupId}/messages`, {
+    axios.get(`http://13.60.31.66:3000/group/${groupId}/messages`, {
         headers: { "Authorization": token }
     })
         .then(response => {
@@ -79,7 +79,7 @@ function loadGroupChats(groupId) {
 }
 function displayRemoveUserForm(groupId, users) {
 
-    axios.get(`http://localhost:3000/group/${groupId}/users`, {
+    axios.get(`http://13.60.31.66:3000/group/${groupId}/users`, {
         headers: { "Authorization": token }
     })
         .then(response => {
@@ -111,17 +111,24 @@ function displayRemoveUserForm(groupId, users) {
             alert('Failed to load users.');
         });
 }
-
 function removeUser(groupId) {
     const selectedUserIds = [];
     document.querySelectorAll('#createGroupForm input[type="checkbox"]:checked').forEach(checkbox => {
         selectedUserIds.push(checkbox.value);
     });
+    console.log(groupId)
     console.log(selectedUserIds);
-    axios.post(`http://localhost:3000/group/${groupId}/removeUsers`, {
-        userIds: selectedUserIds
-    }, {
-        headers: { "Authorization": token }
+    console.log(token);
+
+    axios({
+        method: 'delete',
+        url: `http://13.60.31.66:3000/group/${groupId}/removeUsers`,
+        headers: {
+            'Authorization': token
+        },
+        data: {
+            userIds: selectedUserIds
+        }
     })
         .then(response => {
             console.log(response.data);
@@ -134,8 +141,9 @@ function removeUser(groupId) {
         });
 }
 
+
 function displayAddAdminForm(groupId) {
-    axios.get(`http://localhost:3000/group/${groupId}/users`, {
+    axios.get(`http://13.60.31.66:3000/group/${groupId}/users`, {
         headers: { "Authorization": token }
     })
         .then(response => {
@@ -176,7 +184,7 @@ function promoteToAdmin(groupId) {
     console.log('--------');
     console.log(selectedUserIds);
     console.log('--------');
-    axios.post(`http://localhost:3000/group/${groupId}/promote`, {
+    axios.post(`http://13.60.31.66:3000/group/${groupId}/promote`, {
         userIds: selectedUserIds
     }, {
         headers: { "Authorization": token }
@@ -199,7 +207,7 @@ function promoteToAdmin(groupId) {
 //     const memberSelect = document.getElementById('new-members');
 //     const userIds = Array.from(memberSelect.selectedOptions).map(option => option.value);
 
-//     axios.post('http://localhost:3000/group/addMember', { groupId, userIds }, {
+//     axios.post('http://13.60.31.66:3000/group/addMember', { groupId, userIds }, {
 //         headers: { "Authorization": token }
 //     })
 //         .then(response => {
@@ -219,7 +227,7 @@ function sendMessage() {
     const messageText = document.getElementById('messageInput').value;
     // console.log(groupId, messageText);
 
-    axios.post(`http://localhost:3000/group/${groupId}/message`, { text: messageText }, {
+    axios.post(`http://13.60.31.66:3000/group/${groupId}/message`, { text: messageText }, {
         headers: { "Authorization": token }
     })
         .then(response => {
@@ -233,7 +241,7 @@ function sendMessage() {
 }
 
 function displayAddMemberForm(groupId) {
-    axios.get(`http://localhost:3000/user/users?groupId=${groupId}`, {
+    axios.get(`http://13.60.31.66:3000/user/users?groupId=${groupId}`, {
         headers: { "Authorization": token }
     })
         .then(response => {
@@ -260,7 +268,7 @@ function addMemberToGroup(event, groupId) {
     const memberSelect = document.getElementById('new-members');
     const userIds = Array.from(memberSelect.selectedOptions).map(option => option.value);
 
-    axios.post('http://localhost:3000/group/addMember', { groupId, userIds }, {
+    axios.post('http://13.60.31.66:3000/group/addMember', { groupId, userIds }, {
         headers: { "Authorization": token }
     })
         .then(response => {
@@ -276,7 +284,7 @@ function addMemberToGroup(event, groupId) {
 }
 
 function loadUserGroups() {
-    axios.get('http://localhost:3000/group/user/groups', {
+    axios.get('http://13.60.31.66:3000/group/user/groups', {
         headers: { "Authorization": token }
     })
         .then(response => {
