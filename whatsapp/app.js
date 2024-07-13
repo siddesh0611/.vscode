@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const io = require('socket.io')(4000);
 
 //importing database
 const sequelize = require('./util/database');
@@ -32,6 +33,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/user', userRoutes);
 app.use('/group', groupRoutes);
 
+
+io.on('connection', socket => {
+    console.log('New client connected');
+
+
+    socket.on('joinGroup', groupId => {
+        socket.join(groupId);
+        console.log(`Socket ${socket.id} joined group ${groupId}`);
+    });
+
+
+    socket.on('message', message => {
+        io.to(message.groupId).emit('message', message);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
 
 //database relations
 Group.belongsToMany(User, { through: UserGroup });
