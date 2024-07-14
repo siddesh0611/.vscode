@@ -68,6 +68,11 @@ exports.sendMessage = async (req, res) => {
         console.log(groupId);
         const message = await Message.create({ text, GroupId: groupId, UserId: userId });
 
+        io.to(groupId).emit('receiveMessage', {
+            text: message.text,
+            userName: req.user.userName
+        });
+
         res.status(201).json(message);
     } catch (error) {
         console.error('Error sending message:', error);
