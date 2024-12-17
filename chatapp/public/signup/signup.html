@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <h1>Sign up</h1>
+    </div>
+    <div class="container">
+        <form id="signUpForm" onsubmit="handleSignUp(event)">
+            <div>
+                <label for="userName">User name:</label>
+                <input type="text" name="userName" id="userName" required>
+
+                <label for="emailId">Email ID:</label>
+                <input type="email" name="emailId" id="emailId" required>
+
+                <label for="phoneNo">Phone Number:</label>
+                <input type="number" name="phoneNo" id="phoneNo" required>
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required>
+
+                <button type="submit">Sign Up</button>
+            </div>
+            <div id="message" style="color: crimson;"></div>
+        </form>
+    </div>
+    <div>
+        <label for="login">Already have an account:</label>
+        <a href="../login/login.html" name="login">Login</a>
+    </div>
+
+    <script src="./signup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="../css/signup.css">
+</body>
+
+</html>

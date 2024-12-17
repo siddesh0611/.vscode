@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="../css/expence.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+    <a href="../login/login.html">login</a>
+    <div id="message"></div>
+    <h1>Expense Tracker</h1>
+    <div>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <button id="rzp-button1">Buy Premium</button>
+    </div>
+
+    <form id="expenseForm" onsubmit="handleSubmit(event)">
+        <div>
+            <label for="expenseName">Expense Name:</label>
+            <select id="expenseName" required>
+                <option value="" disabled selected>Select an expense</option>
+                <option value="Rent">Rent</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Health">Health</option>
+            </select>
+        </div>
+
+        <label for="discription">Discription</label>
+        <input type="text" id="discription" required>
+
+        <label for="expenseAmount">Amount:</label>
+        <input type="number" id="expenseAmount" required>
+        <button type="submit">Add Expense</button>
+    </form>
+
+    <div class="table">
+        <label id="rowsPerPage" for="rowsPerPage">Rows per page</label>
+        <select id="rowsPerPage" class="rowsPerPage">
+            <option value="" disabled selected>0</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+        </select>
+        <button id="rowsPerPage" onclick="setNoOfRows(event)">filter</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Expense Name</th>
+                    <th>Amount</th>
+                    <th>Discription</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+            </tbody>
+        </table>
+    </div>
+
+
+    <div>
+        <button onclick="downloadExpense()">Download Expense</button>
+    </div>
+
+    <div>
+        <button onclick="getReport()">Get Report</button>
+        <div id="report">
+            <h2>Current Week</h2>
+            <ul id="weekExpenses"></ul>
+            <h2>Current Month</h2>
+            <ul id="monthExpenses"></ul>
+            <h2>Current Year</h2>
+            <ul id="yearExpenses"></ul>
+        </div>
+    </div>
+
+    <div id="pagination"></div>
+    <div id="leaderboard"></div>
+    <div id="fileUrl"></div>
+    <script src="expence.js"></script>
+</body>
+
+</html>

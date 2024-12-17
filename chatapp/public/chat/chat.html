@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="../css/expence.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+    <a href="../login/login.html">login</a>
+    <form id="createGroupForm">
+        <input type="text" id="groupName" placeholder="Group Name" required />
+        <button type="submit">Create Group</button>
+    </form>
+
+    <ul id="groupsList"></ul>
+    <form id="inviteUserForm">
+        <input type="email" id="userEmail" placeholder="User Email" required />
+        <input type="hidden" id="groupId" />
+        <button type="submit">Invite</button>
+    </form>
+
+    <div id="displayMessage"></div>
+    <h1>Chat APP</h1>
+
+    <div id="message"></div>
+
+    <form onsubmit="sendMessage(event)">
+        <input type="text" id="userChat">
+        <button type="submit">Send</button>
+    </form>
+
+    <script src="./chat.js"></script>
+</body>
+
+</html>
